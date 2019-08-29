@@ -89,17 +89,18 @@ inputFile.addEventListener("change",fileChange,false);
 outputFile.addEventListener("change",fileChange2,false);
 
 function sample(){
-	req=new XMLHttpsRequest();
-	req.open("get","in.txt",true);
-	req.send(null);
+	req=new XMLHttpRequest();
+	req.open("GET","in.txt",true);
 	req.onload=function(){
-		f1(req.responceText);
+		f1(req.responseText);
 	};
-	req.open("get","out.txt",true);
-	req.send(null);
-	req.onload=function(){
-		f2(req.responceText);
+	req.send();
+	req2=new XMLHttpRequest();
+	req2.open("GET","out.txt",true);
+	req2.onload=function(){
+		f2(req2.responseText);
 	};
+	req2.send();
 }
 
 function render(tim){
