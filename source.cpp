@@ -7,8 +7,8 @@ struct st{
 	int ty;//ty=0→辺がタイトになる、ty=1→施設を開設できる
 	int a,b;
 };
-bool operator<(st a,st b){
-	return make_tuple(a.tim,a.ty,a.a,a.b)<make_tuple(b.tim,b.ty,b.a,b.b);
+bool operator<(const st&a,const st&b){
+	return a.tim>b.tim;
 }
 
 double x[2000],y[2000];
@@ -27,7 +27,7 @@ int d[2000];
 vector<int>special[2000];
 vector<int>v[2000];
 
-set<st>se;
+priority_queue<st>que;
 
 void update(int b,double tim){
 	sum[b]+=(tim-last[b])*cont[b];
@@ -41,7 +41,7 @@ void push(int b){
 	}
 	double t=(f[b]-sum[b])/cont[b]+last[b];
 	est[b]=t;
-	se.insert({est[b],1,b});
+	que.push({est[b],1,b});
 }
 
 void end(int a,double tim){
@@ -64,14 +64,14 @@ int main(){
 		double dist=(x[j+n]-x[i])*(x[j+n]-x[i])+(y[j+n]-y[i])*(y[j+n]-y[i]);
 		dist=sqrt(dist);
 		c[i][j]=dist;
-		se.insert({dist,0,i,j});
+		que.push({dist,0,i,j});
 	}
 	ofstream ofs("./out.txt");
 	rep(i,n)alpha[i]=INFINITY;
 	memset(p,-1,sizeof(p));
 	vector<int>F;//仮想開設された集合
-	while(!se.empty()){
-		st e=*se.begin();se.erase(se.begin());
+	while(!que.empty()){
+		st e=que.top();que.pop();
 		if(e.ty==0){//辺がタイト
 			if(e.tim>=alpha[e.a])continue;
 			
